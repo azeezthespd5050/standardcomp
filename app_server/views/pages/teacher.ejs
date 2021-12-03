@@ -1,0 +1,205 @@
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+    <!-- The Grid -->
+    <div class="w3-row">
+        <!-- Left Column -->
+        <div class="w3-col m3 w3-mobile">
+            <!-- Profile -->
+            <div class="w3-card w3-round w3-white  w3-mobile">
+                <div class="w3-container">
+                    <div id="dataDiv" data-teacher="<%= JSON.stringify(teacher) %>"></div>
+                    <input id="teacherProfilePictureInput" type="file" onchange="teacherProfilePictureInputChanged(event.target)" style="display: none;">
+                    <h4 class="w3-center" style="text-transform: capitalize;"><%= teacher.full_name %></h4>
+                    <p class="w3-center"><img id="teacherProfilePicture" onclick="teacherProfilePictureClicked(event)" src="<%= teacher.image_url %>" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                    <hr>
+                    <button class="w3-large w3-center" onclick="loginTeacher()" style="width: 100%;">Log In</button>
+                    <button class="w3-large w3-center" onclick="logoutTeacher()" style="width: 100%;">Log out</button>
+                    <% if(teacher.isAdmin){ %>
+                        <button class="w3-large w3-center" onclick="adminClicked()" style="width: 100%;">Admin Page</button>
+                        <button class="w3-large w3-center" onclick="addRemoveSubjectsClicked()" style="width: 100%;">Add/Remove Subjects</button>
+                        <button class="w3-large w3-center" onclick="addRemoveClassesClicked()" style="width: 100%;">Add/Remove classes</button>
+                    <% } %> 
+
+                    <button class="w3-large w3-center" onclick="sectorClicked()" style="width: 100%;">Seclect Sector</button>
+                    <button class="w3-large w3-center" onclick="addClassSubjectClicked()" style="width: 100%;">Add Class/Subject(s)</button>
+                    <button class="w3-large w3-center" onclick="removeClassSubjectClicked()" style="width: 100%;">Remove Class/Subject(s) </button>
+                </div>
+            </div>
+            <br>
+            
+            <!-- Accordion -->
+            <div class="w3-card w3-round">
+            <div class="w3-white">
+                <% if(teacher.form_teacher && teacher.form_teacher.length > 0){ %>
+                    <button class="w3-large w3-center" onclick="formTeacherStudentsClicked(event)" style="width: 100%;">Edit My Students </button>
+                    <button id="printDocs" class="w3-large w3-center" onclick="printDocsClicked()" style="width: 100%;"> Print Docs </button>
+                    <button class="w3-large w3-center" onclick="myStudentsAddRemoveSubjectsClicked(event)" style="width: 100%;">My students Add/Remove Subjects </button>
+                    <button class="w3-large w3-center" onclick="adminClicked()" style="width: 100%;">Add New Student</button>
+                    <button class="w3-large w3-center" onclick="findMyStudentClicked(event)" style="width: 100%;">Find My Student </button>
+                <% } %> 
+                <button class="w3-large w3-center" onclick="inputScoresClicked()" style="width: 100%;">Input Scores </button>
+                
+                <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> Section/Term</button>
+                <div id="Demo1" class="w3-hide w3-container">
+                    <form class="w3-container" id="sectionTermForm">
+                        <div class="w3-panel" id="sectionDiv">
+                        <select onchange="sectionChanged(event)" name="selectedSection" class="w3-select" name="option">
+                            <option value="" disabled selected>Choose Session</option>
+                            <% let sectionArray = ["2019/2020","2020/2021","2021/202"];
+                                sectionArray.forEach(section => { %>
+                                <option value="<%= section %>"> <%= section %></option>
+                            <% }); %>
+                            </select>
+                        </div>
+
+                        <div class="w3-panel" id="termDiv">
+                        <select onchange="termChanged(event)" name="selectedTerm" class="w3-select" name="option">
+                            <option value="" disabled selected>Choose Term</option>
+                            <% let termArray = ["firstTerm","secondTerm","thirdTerm"];
+                                termArray.forEach(term => { %>
+                                <option value="<%= term %>"> <%= term %></option>
+                            <% }); %>
+                            </select>
+                        </div>
+
+
+                        <div class="w3-panel" id="caDiv">
+                        <select onchange="caChanged(event)" name="selectedCa" class="w3-select" name="option">
+                            <option value="" disabled selected>Choose CA</option>
+                            <% let caArray = ["firstForm","midTerm","secondForm", "exam"];
+                                caArray.forEach(ca => { %>
+                                <option value="<%= ca %>"> <%= ca %></option>
+                            <% }); %>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>      
+            </div>
+            <br>
+            
+            
+            <br>
+            
+            <!-- Alert Box -->
+            <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+            <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
+                <i class="fa fa-remove"></i>
+            </span>
+            <p><strong>Hey!</strong></p>
+            <p>People are looking at your profile. Find out who.</p>
+            </div>
+        
+        <!-- End Left Column -->
+        </div>
+        
+        <!-- Middle Column -->
+        <div class="w3-col m7">
+        
+            <div class="w3-row-padding">
+                <div class="w3-col m12  w3-mobile">
+                    <div class="w3-card w3-round w3-white">
+                        <div class="w3-container w3-padding">
+                            <h6 class="w3-opacity">Social Media template by intercontinental School</h6>
+                            <p contenteditable="true" class="w3-border w3-padding">Status: Feeling Blue</p>
+                            <button onclick="studentSetupClicked(event)" type="button" class="w3-button w3-theme" disabled><i class="fa fa-pencil"></i>  Post</button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="teacherDisplay" class="w3-container w3-card w3-white w3-round w3-margin w3-mobile"><br>
+                <img src="<%= teacher.image_url %>" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                <span class="w3-right w3-opacity">1 min</span>
+                <h4  style="text-transform: capitalize;"><%= teacher.full_name %></h4><br>
+                <hr class="w3-clear">
+                <button onclick="showHideTeacherProfile(event, '<%= `teacherProfileDiv` %>')" class="w3-panel w3-center w3-xlarge">Teacher Profile</button>
+                <div id="teacherProfileDiv" class="w3-row-padding w3-hide" style="margin:0 -16px">
+                    <form id="teacherProfileForm" class="w3-containar">
+                        <label class="w3-text-brown"><b>Title</b></label>
+                        <select class="w3-select w3-border" name="title">
+                            <% let titleArray = ["Mal.", "Mr", "Mrs", "Miss"];
+                                titleArray.forEach((title) => { 
+                                    let selected = '';
+                                    if(title === teacher.title){
+                                        selected = 'selected';
+                                    }
+                            %>
+                                <option value="<%= title %>" <%= selected %>> <%= title %></option>
+                            <% }) %>
+                        </select>
+                        <br>
+
+                        <label class="w3-text-brown"><b>First Name</b></label>
+                        <input value="<%=teacher.first_name %>" class="w3-input w3-border" type="text" name="first_name"><br>
+                        
+                        <label class="w3-text-brown"><b>Last Name</b></label>
+                        <input value="<%=teacher.last_name %>" class="w3-input w3-border" type="text" name="last_name"><br>
+                        
+                        <label class="w3-text-brown"><b>Other Name</b></label>
+                        <input value="<%=teacher.other_name %>" class="w3-input w3-border" type="text" name="other_name"><br>
+                            
+                        <label class="w3-text-brown"><b>Password</b></label>
+                        <input value="<%=teacher.password %>" class="w3-input w3-border" type="text" name="password"><br>
+                            
+                        
+                        <label class="w3-text-brown"><b>Mobile Number</b></label>
+                        <input value="<%=teacher.mobile_number %>" class="w3-input w3-border" type="text" name="mobile_number"><br>
+                            
+                        <button onclick="updateTeacherMainProfile(event)" type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Update Profile</button>
+
+                    </form>
+                </div> 
+            </div>
+        
+        <!-- End Middle Column -->
+        </div>
+      
+        <!-- Right Column -->
+        <div class="w3-col m2">
+            <div class="w3-card w3-round w3-white w3-center">
+                <div class="w3-container">
+                    <p>Upcoming Events:</p>
+                    <img src="images/forest.jpeg" alt="Forest" style="width:100%;">
+                    <p><strong>Holiday</strong></p>
+                    <p>Friday 15:00</p>
+                    <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
+                </div>
+            </div>
+            <br>
+        
+            <div class="w3-card w3-round w3-white w3-center">
+                <div class="w3-container">
+                    <p>Friend Request</p>
+                    <img src="images/avatar6.png" alt="Avatar" style="width:50%"><br>
+                    <span>Jane Doe</span>
+                    <div class="w3-row w3-opacity">
+                        <div class="w3-half">
+                            <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
+                        </div>
+                        <div class="w3-half">
+                            <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        
+            <div class="w3-card w3-round w3-white w3-padding-16 w3-center">
+                <p>ADS</p>
+            </div>
+            <br>
+        
+            <div class="w3-card w3-round w3-white w3-padding-32 w3-center">
+                <p><i class="fa fa-bug w3-xxlarge"></i></p>
+            </div>
+        
+        <!-- End Right Column -->
+        </div>
+    <!-- End Grid -->
+    </div>
+    
+    <!-- End Page Container -->
+</div>
+<br>

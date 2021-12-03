@@ -1,0 +1,72 @@
+<div class="w3-bar w3-brown">
+    <p class="w3-panel w3-center"><%= subject %></p>
+</div>
+<div class="w3-bar w3-green">
+    <div class="w3-bar-item">
+        <label>CA</label>
+        <input onchange="hideShowFormOrder(event, 'CA')" class="w3-input" type="checkbox" checked>
+    </div>
+    <div class="w3-bar-item">
+        <label>Exam</label>
+        <input onchange="hideShowFormOrder(event, 'exam')" class="w3-input" type="checkbox" checked>
+    </div>
+</div>
+<% 
+ student_array.forEach((student, index)=>{
+     let CATotal = 0;
+    let CA1Total = 0;
+    CA1Total = student.recordArray[0]?student.recordArray[0]:0;
+    let CA2Total = 0;
+    CA2Total = student.recordArray[1]?student.recordArray[1]:0;
+    CATotal = parseFloat(CA1Total) + parseFlaot(CA2Total);
+    let examTotal = student.recordArray[2]?student.recordArray[2]:0;
+%>
+<hr>
+<div>
+    <div class="subjectTeacherStudentsDiv" id="subjectTeacherStudentDataDiv_<%= student.student_id %>" data-subject-teacher-student="<%= JSON.stringify(student) %>"></div>
+    <input id="studentProfilePictureInput_<%= student.student_id %>" type="file" onchange="studentProfilePictureInputChanged(event.target, '<%= JSON.stringify(student) %>')" style="display: none;">
+    <img id="studentProfilePicture_<%= student.student_id %>"  src="<%= student.image_url %>" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+    <span class="w3-right w3-opacity"><%= student.student_id %></span>
+    <h4 style="text-transform: capitalize;"><%= student.full_name %></h4><br>
+    <hr class="w3-clear">
+    <button onclick="showHideStudentProfile(event, 'studentProfileDiv_<%= JSON.stringify(student.student_id) %>')" class="w3-panel w3-center w3-large">Open/close score table</button>
+    <div id="studentProfileDiv_<%= student.student_id %>" class="w3-row-padding" style="margin:0 -16px">
+        <form id="subjectTeacherStudentsForm_<%= student.student_id %>" class="w3-containar formorder">
+            
+            <div class="w3-container CA">
+                <p class="w3-brown w3-center">Cont. Ass.</p>
+                <table class="w3-table-all w3-centered" id="CA_"<%= student.student_id %>>
+                    <tr w3-brown>
+                        <th>CA1</th>
+                        <th>CA2</th>
+                        <th>total</th>
+                    </tr>
+                    <tr>
+                        <td><input value="<%= student.recordArray[0] %>" onchange="formOrderInputChaned(event, '<%= JSON.stringify({student_id: student.student_id, inputIndex:0, maxValue: 20, type:`CATotal`, studentClass: `${student.student_class}`, subject: `${subject}`}) %>')" type="number" class="w3-input CATotal_<%= student.student_id %>" max="20" min="0" maxlength="2"></td>
+                        <td><input value="<%= student.recordArray[1] %>" onchange="formOrderInputChaned(event, '<%= JSON.stringify({student_id: student.student_id, inputIndex:1, maxValue: 20, type:`CATotal`, studentClass: `${student.student_class}`, subject: `${subject}`}) %>')" type="number" class="w3-input CATotal_<%= student.student_id %>" max="20" min="0" maxlength="2"></td>
+                        <td><input id="CATotal_<%= student.student_id %>" type="number" class="w3-input" value="<%= CATotal %>" disabled></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="w3-container exam">
+                <p class="w3-brown w3-center">Exam</p>
+                <table class="w3-table-all w3-centered" id="exam_"<%= student.student_id %>>
+                    <tr w3-brown>
+                        <th>Exam</th>
+                        <th>total</th>
+                    </tr>
+                    <tr>
+                        <td><input value="<%= student.recordArray[2] %>" onchange="formOrderInputChaned(event, '<%= JSON.stringify({student_id: student.student_id, inputIndex:2, maxValue: 60, type:`examTotal`, studentClass: `${student.student_class}`, subject: `${subject}`}) %>')" type="number" class="w3-input examTotal_<%= student.student_id %>" max="60" min="0" maxlength="2"></th>
+                        <td><input id="examTotal_<%= student.student_id %>" type="number" class="w3-input" value="<%= examTotal %>" disabled></th>
+                    </tr>
+                </table>
+            </div>
+            
+            <br>
+        </form>
+        <button data-classSubject="<%= JSON.stringify({studentClass: `${student.student_class}`, subject: `${subject}`}) %>" w3-panel w3-center w3-largetype="button" onclick="saveSubjectTeacherStudents(event, '<%= JSON.stringify(student.student_id) %>')">Save Student</button>
+    </div>
+    <br><br>
+</div>
+<% }) %> 

@@ -1,0 +1,107 @@
+<div id="myModal" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom w3-card-4">
+        <header class="w3-container w3-brown"> 
+            <span onclick="document.getElementById('myModal').style.display='none'" 
+                class="w3-button w3-display-topright">&times;</span>
+            <h2><%= schoolName %></h2>
+        </header>
+        <br><br>
+        <div class="w3-container" id="myModalContent">
+        </div>
+        <br><br>
+        <footer class="w3-container w3-brown">
+            <p><%= schoolMotto %></p>
+        </footer>
+    </div>
+</div>
+
+<div id="myFormModal" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+        <div class="w3-center"><br>
+            <span onclick="document.getElementById('myFormModal').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+            <img src="images/badge.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+        </div>
+        <div id="loginFormErrorDisplay" class="w3-panel w3-red w3-center" style="display: none;"></div>
+        <hr>
+        <form id="teacherLoginForm" class="w3-container" action="/teacher">
+            <div class="w3-section">
+                <label><b>Username</b></label>
+                <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
+                <label><b>Password</b></label>
+                <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
+                <button onclick="teacherLoginFormClicked(event)" class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Login</button>
+                <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
+            </div>
+        </form>
+
+        <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+            <button onclick="document.getElementById('myFormModal').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+            <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="docsModal" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom">
+        <header class="w3-container w3-blue"> 
+            <span onclick="document.getElementById('docsModal').style.display='none'" 
+            class="w3-button w3-blue w3-xlarge w3-display-topright">&times;</span>
+            <h2>Docs Printing</h2>
+        </header>
+   
+        <div class="w3-bar w3-border-bottom">
+            <button class="tablink w3-bar-item w3-button" onclick="openDoc(event, 'result')">Print Result</button>
+            <button class="tablink w3-bar-item w3-button" onclick="openDoc(event, 'broadsheet')">Print Broadsheet</button>
+            <button class="tablink w3-bar-item w3-button" onclick="openDoc(event, 'scoresheet')">Print Scoresheet</button>
+        </div>
+   
+        <div id="result" class="w3-container doc">
+            
+        </div>
+   
+        <div id="broadsheet" class="w3-container doc">
+        </div>
+   
+        <div id="scoresheet" class="w3-container doc">
+        </div>
+   
+        <div class="w3-container w3-light-grey w3-padding">
+            <button class="w3-button w3-right w3-white w3-border" 
+            onclick="document.getElementById('docsModal').style.display='none'">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="adminModal" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom">
+        <header class="w3-container w3-blue"> 
+            <span onclick="document.getElementById('adminModal').style.display='none'" 
+            class="w3-button w3-blue w3-xlarge w3-display-topright">&times;</span>
+            <h2>Admin Page</h2>
+        </header>
+   
+        <div class="w3-bar w3-border-bottom">
+            <button id="admintablink" class="tablink w3-bar-item w3-button" onclick="openAdmin(event, 'editTeacher')">Edit Teacher</button>
+            <button class="tablink w3-bar-item w3-button" onclick="openAdmin(event, 'addTeacher')">Add Teacher</button>
+            <button class="tablink w3-bar-item w3-button" onclick="openAdmin(event, 'addStudent')">Add Student</button>
+        </div>
+   
+        <div id="editTeacher" class="w3-container admin">
+            
+        </div>
+   
+        <div id="addTeacher" class="w3-container admin">
+        </div>
+   
+        <div id="addStudent" class="w3-container admin">
+        </div>
+   
+        <div class="w3-container w3-light-grey w3-padding">
+            <button class="w3-button w3-right w3-white w3-border" 
+            onclick="document.getElementById('adminModal').style.display='none'">Close</button>
+        </div>
+    </div>
+</div>

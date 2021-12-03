@@ -1,0 +1,33 @@
+<h2 class="w3-panel w3-brown w3-center">Standard Comprehensive College Kano</h2>
+
+<div class="w3-content w3-display-container">
+
+  <% 
+    let captions = [
+      { position:"bottomleft", caption: "Standard Comprehensive 0"},
+      {position:"bottomright", caption:"Standard Comprehensive 1"},
+      {position:"topleft", caption:"Standard Comprehensive 2"},
+      {position:"topright", caption:"Standard Comprehensive 3"},
+      {position:"middle", caption:"Standard Comprehensive 4"}
+    ];
+    schoolDisplay.forEach((val, index) => { 
+      let position = captions[index].position;
+      let caption = captions[index].caption
+  %>
+  <div class="w3-display-container mySlides">
+    <input name="<%= schoolDisplay[index].name %>" id="schoolDisplayInput_<%= schoolDisplay[index].school_id %>" type="file" onchange="schoolProfilePictureInputChanged(event.target, '<%= JSON.stringify(`schooldisplay`) %>')" style="display: none;">
+  
+    <img id="schoolDisplayImage_<%= schoolDisplay[index].school_id %>" onclick="schoolProfilePictureClicked(event, '<%= JSON.stringify(`schoolDisplayInput_${schoolDisplay[index].school_id}`)%>')" src="<%= schoolDisplay[index].url %>" alt="Boss" style="width:100%">
+    
+    <div class="w3-display-<%= position %> w3-large w3-container w3-padding-16 w3-black">
+      <%= caption %>
+    </div>
+  </div>
+
+  <% }) %>
+  
+  <button class="w3-button w3-display-left w3-black" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="w3-button w3-display-right w3-black" onclick="plusDivs(1)">&#10095;</button>
+  
+  </div>
+  
