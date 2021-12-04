@@ -291,7 +291,7 @@ const updateFormTeacherStudents = async (req, res) => {
             student.first_name.replace(/'+/g,"''"), 
                         student.last_name.replace(/'+/g,"''"), 
                     student.other_name.replace(/'+/g,"''"), 
-                    student.formTeacherSudentClass[0], 
+                    student.formTeacherStudentClass[0], 
                     `{${subjectString}}`
                 ];
 
