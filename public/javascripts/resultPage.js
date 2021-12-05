@@ -899,7 +899,7 @@ async function printCollegeResult(){
         doc.text(`${caType === 'exam'?class_average:2*parseFloat(class_average)}`, 130, 65, {baseline: 'top'});
         
         doc.text("Days School Open:", 145, 65, {baseline: 'top'});
-        doc.text(`${student.days_school_open, days_school_open}`, 190, 65, {baseline: 'top'});
+        doc.text(`${student.days_school_open || days_school_open}`, 190, 65, {baseline: 'top'});
         
         doc.text("No. in Class:", 8, 70, {baseline: 'top'});
         doc.text(`${number_in_class}`, 55, 70, {baseline: 'top'});
