@@ -325,9 +325,6 @@ const loadAllStudents = async (req, res) => {
         deduction = 0;
     }
     let subject_array = req.body.subject_array;
-    if(studentClass.indexOf('nursery') !== -1 || studentClass.indexOf('play') !== -1){
-        return res.status(200).json([]);
-    }
     let searchClass = '';
     if(/^jss 1/.test(studentClass)){
         searchClass = 'jss 1';
