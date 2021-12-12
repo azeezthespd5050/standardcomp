@@ -118,6 +118,7 @@ function updateStudentsDaysSchoolOpen(event, studentClass){
 }
 
 function updateStudentsComments(event, studentId){
+    console.log("in comments");
     myModalContent.innerHTML = "Please wait...";
     myModal.style.display = 'block'
     let value = event.target.value;
@@ -229,19 +230,18 @@ function updateStudentsNextTerm(event, studentClass){
 
 function scoreString(studentForResult, numberInCombinedStream){
   let scString = `
-  <h4>ACT <span><input id="isACT" type="checkbox"></span></h4>
     <div>
-      <h3>Number of students in ${studentForResult[0].student_class}: ${studentForResult.length}</h3>
-      <h3>Number of students in combined stream ${numberInCombinedStream}</h3>
+        <h3>Number of students in ${studentForResult[0].student_class}: ${studentForResult.length}</h3>
+        <h3>Number of students in combined stream ${numberInCombinedStream}</h3>
       
-      <div>
-          <h3>Next Term Begins</h3>
-          <input type="text" id="next_term_begins" onchange="updateStudentsNextTerm(event)">
-          <h3>Day school open</h3>
-          <input type="text" id="days_school_open" onchange="updateStudentsDaysSchoolOpen(event)">
-          <h3>Class Form teacher</h3>
-          <input type="text" value="${studentForResult[0].form_teacher[0]}" id="formTeacher" onchange="updateStudentsFormTeacher(event)">
-      </div>
+        <div>
+            <h3>Next Term Begins</h3>
+            <input type="text" value="${studentForResult[0].next_term_begins}" id="next_term_begins" onchange="updateStudentsNextTerm(event)">
+            <h3>Day school open</h3>
+            <input type="text" value="${studentForResult[0].days_school_open}" id="days_school_open" onchange="updateStudentsDaysSchoolOpen(event)">
+            <h3>Class Form teacher</h3>
+            <input type="text" value="${studentForResult[0].form_teacher[0]}" id="formTeacher" onchange="updateStudentsFormTeacher(event)">
+        </div>
     </div>
     <div class="card">
   `;
@@ -264,32 +264,33 @@ function scoreString(studentForResult, numberInCombinedStream){
             </div>
             <div class="form-group row">
                 <div class="col-md-8">
-                    <textarea id="comments_${student.student_id}" name="comments" value="${student.comments}" rows="2" class="form-control"></textarea>
+                    <textarea onchange="updateStudentsComments(event, '${student.student_id}')" id="comments_${student.student_id}" name="comments" rows="2" class="form-control">${student.comments}</textarea>
                 </div>
             </div>
             <div class="row">
-                <h3>Student Days Absent</h3>
+                <h3>Student Times Absent</h3>
             </div>
             <div class="form-group row">
                 <div class="col-md-8">
                     <input type="number" onchange="updateStudentDaysAbsent(event, '${student.student_id}')" class="form-control" value='${student.days_absent}'>
                 </div>
-            </div><div class="card">
-            <div class="row">
-                <button style="max-width:200px" class="traits" onclick="document.getElementById('traits_${student.student_id}').style.display=document.getElementById('traits_${student.student_id}').style.display === 'block'?'none':'block'">Click to open/close Affective Traits</button>
             </div>
-            <div  id="traits_${student.student_id}" style="display: none">
-                <table data-student_id="${student.student_id}" border="1">
-                    <thead>
-                        <tr>
-                            <th><div>Traits</div></th>
-                            <th>5</th>
-                            <th>4</th>
-                            <th>3</th>
-                            <th>2</th>
-                            <th>1</th>
-                        </tr>
-                    </thead>
+            <div class="card">
+                <div class="row">
+                    <button style="max-width:200px" class="traits" onclick="document.getElementById('traits_${student.student_id}').style.display=document.getElementById('traits_${student.student_id}').style.display === 'block'?'none':'block'">Click to open/close Affective Traits</button>
+                </div>
+                <div  id="traits_${student.student_id}" style="display: none">
+                    <table data-student_id="${student.student_id}" border="1">
+                        <thead>
+                            <tr>
+                                <th><div>Traits</div></th>
+                                <th>5</th>
+                                <th>4</th>
+                                <th>3</th>
+                                <th>2</th>
+                                <th>1</th>
+                            </tr>
+                        </thead>
                     <tbody>`;
                         for(let traits of student.affective_traits_array){
                             scString += `
@@ -700,6 +701,20 @@ async function printCollegeResult(){
     //var checkmark64 = await toDataURL(schoolCheckmarkUrl);
     var studentDefaultPhoto = "https://s3.us-east-1.amazonaws.com/standardcomprehensive/schoolphotos/studentphoto.png";
     //var studentDefaultPhoto64 = await toDataURL(studentDefaultPhoto);
+
+    let ind = 0;
+    myModalContent.innerHTML = `<h3 class="w3-yellow">Please wait preparing</h3>`;
+    myModal.style.display = 'block';
+    for(let stud of studentForResult ){
+        let base64image;
+        studentForResult[ind]["imageSet"] = false;
+        if(stud.image_url.indexOf('amazonaws.com') > 0){
+            base64image = await toDataURL(stud.image_url);
+            studentForResult[ind]["base64image"] = base64image;
+            studentForResult[ind]["imageSet"] = true;
+        }
+        ind++;
+    }
     let doc = new jsPDF();
     let studClass  = window["studentsForResultClass"];
     
@@ -812,12 +827,8 @@ async function printCollegeResult(){
 
         var imageType = student.image_url.substring(student.image_url.lastIndexOf(".") + 1).toUpperCase();
         doc.addImage(badge64,"PNG", 8,12, 30,25);
-        if(student.image_url === "images/studentphoto.png" ||
-        student.image_url === "images/studentphoto.png"){
-            //doc.addImage(studentDefaultPhoto64, 'PNG', pageWidth - 8-30,12, 30,25);
-        }else{
-            let base64image = await toDataURL(student.image_url);
-            //doc.addImage(base64image, imageType, pageWidth - 8-30,12, 30,25);
+        if(student.imageSet){
+            doc.addImage(student.base64image, 'PNG', pageWidth - 8-30,12, 30,25);
         }
         doc.addImage(signature64,"PNG", pageWidth-30, pageHeight-25, 25, 20 );
         //doc.addImage(background64,"PNG", 0,0,pageWidth, pageHeight);
@@ -865,7 +876,7 @@ async function printCollegeResult(){
         student_id = parseInt(student_id);
         admission_number += (student_id < 10) ? "000"+student_id :(student_id < 100) ? "00"+student_id : 
                 (student_id <1000)?"0"+student_id:student_id;
-        let  days_school_open = 55;
+        let  days_school_open = student.days_school_open || 55;
         
         doc.text("NAME: "+ student_name, 8, 45, {baseline: 'top'});
         doc.text("Class: " + studentClass[0].toUpperCase() + studentClass.substring(1), 8, 50, {baseline: 'top'});
@@ -908,7 +919,7 @@ async function printCollegeResult(){
         doc.text(`${caType === 'exam' ? max_average.toFixed(2) : (2* max_average).toFixed(2)}` , 130, 70, {baseline: 'top'});
         
         doc.text("Time(s) Present:", 145, 70, {baseline: 'top'});
-        doc.text(`${2*days_school_open - (parseInt(student.days_absent)?parseInt(student.days_absent):0)}`, 190, 70, {baseline: 'top'});
+        doc.text(`${2 * parseInt(days_school_open) - (parseInt(student.days_absent)?parseInt(student.days_absent):0)}`, 190, 70, {baseline: 'top'});
         
         //doc.text("No. in Combined Stream:", 8, 75, {baseline: 'top'});
         //doc.text(`${numberInCombinedStream}`, 55, 75, {baseline: 'top'});
@@ -1256,7 +1267,7 @@ async function printCollegeResult(){
         pageContent(studentForResult[count++], count);
     }
     //doc.output('pdfobjectnewwindow');
-
+    myModal.style.display = 'none';
     saveFormTeacherStudentsButton = "";
     doc.save(`${studentClass}_${caType}.pdf`);
     

@@ -43,7 +43,6 @@ const loadSubjectStudents = async (req, res) => {
         return res.status(200).json("could not load students");
     }
     students = students.rows;
-    console.log("students", students);
     let nullRecord = Array(9).fill("");
     if(students.length>0){
         students.forEach((student)=>{
@@ -117,7 +116,6 @@ const saveSubjectTeacherStudents = async (req, res) => {
             text = `update students set "${subject}"[${sect}] = $1
             where student_id=$2`;
             value = [`${record.join()}`, student.student_id];
-            console.log(text);
         }else{
             text = `update students set "${subject}"[${sect}] = $1
             where student_id=$2`;
@@ -138,7 +136,6 @@ const addSubjectsToStudent = async (req, res) => {
     let studentClass = req.body.selectedClass;
     let selectedSubjects = req.body.selectedSubjects;
 
-    console.log(studentClass, selectedSubjects);
     let text = `select student_id, subjects[3] from students where student_class[3]=$1`;
     let value = [studentClass];
 
@@ -176,7 +173,6 @@ const removeSubjectsFromStudent = async (req, res) => {
     let studentClass = req.body.selectedClass;
     let selectedSubjects = req.body.selectedSubjects;
 
-    console.log(studentClass, selectedSubjects);
     let text = `select student_id, subjects[3] from students where student_class[3]=$1`;
     let value = [studentClass];
 
